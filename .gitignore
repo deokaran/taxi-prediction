@@ -1,0 +1,16 @@
+# Virtual environments
+.venv/
+venv/
+.env
+
+# Large raw and cleaned datasets (>100 MB GitHub limit; regenerate locally with taxi_duration_project.py)
+*.xlsx
+data/cleaned/*.csv
+
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+
+# Jupyter
+.ipynb_checkpoints/

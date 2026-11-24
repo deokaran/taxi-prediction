@@ -1,0 +1,27 @@
+{
+  "raw_rows": 3076903,
+  "cleaned_rows_full_dataset": 2972241,
+  "modeling_sample_rows": 120000,
+  "model_input_features": 22,
+  "target_column": "trip_duration_min",
+  "target_min": 1.0,
+  "target_max": 167.03,
+  "target_mean_sample": 16.641994583333336,
+  "target_median_sample": 12.93,
+  "forbidden_columns_dropped": [
+    "Airport_fee",
+    "congestion_surcharge",
+    "extra",
+    "fare_amount",
+    "improvement_surcharge",
+    "mta_tax",
+    "payment_type",
+    "store_and_fwd_flag",
+    "tip_amount",
+    "tolls_amount",
+    "total_amount",
+    "tpep_dropoff_datetime"
+  ],
+  "contains_any_forbidden_column": false,
+  "missing_passenger_count_in_sample": 11969
+}

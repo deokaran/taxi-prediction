@@ -1,0 +1,311 @@
+{
+  "cleaned_rows": 2972241,
+  "duration_mean_min": 16.6789,
+  "duration_std_min": 13.3138,
+  "distance_mean_mi": 3.6001,
+  "by_hour": [
+    {
+      "hour": 0,
+      "trips": 82502,
+      "mean_duration_min": 15.267,
+      "mean_distance_mi": 4.582
+    },
+    {
+      "hour": 1,
+      "trips": 53116,
+      "mean_duration_min": 13.955,
+      "mean_distance_mi": 4.255
+    },
+    {
+      "hour": 2,
+      "trips": 34576,
+      "mean_duration_min": 12.856,
+      "mean_distance_mi": 3.748
+    },
+    {
+      "hour": 3,
+      "trips": 21852,
+      "mean_duration_min": 12.665,
+      "mean_distance_mi": 3.8
+    },
+    {
+      "hour": 4,
+      "trips": 16187,
+      "mean_duration_min": 14.352,
+      "mean_distance_mi": 5.194
+    },
+    {
+      "hour": 5,
+      "trips": 18674,
+      "mean_duration_min": 16.326,
+      "mean_distance_mi": 6.183
+    },
+    {
+      "hour": 6,
+      "trips": 43131,
+      "mean_duration_min": 15.666,
+      "mean_distance_mi": 4.806
+    },
+    {
+      "hour": 7,
+      "trips": 78510,
+      "mean_duration_min": 15.383,
+      "mean_distance_mi": 3.832
+    },
+    {
+      "hour": 8,
+      "trips": 117838,
+      "mean_duration_min": 16.516,
+      "mean_distance_mi": 3.332
+    },
+    {
+      "hour": 9,
+      "trips": 127583,
+      "mean_duration_min": 16.626,
+      "mean_distance_mi": 3.196
+    },
+    {
+      "hour": 10,
+      "trips": 136667,
+      "mean_duration_min": 16.583,
+      "mean_distance_mi": 3.207
+    },
+    {
+      "hour": 11,
+      "trips": 148931,
+      "mean_duration_min": 17.086,
+      "mean_distance_mi": 3.237
+    },
+    {
+      "hour": 12,
+      "trips": 164138,
+      "mean_duration_min": 17.295,
+      "mean_distance_mi": 3.323
+    },
+    {
+      "hour": 13,
+      "trips": 173985,
+      "mean_duration_min": 17.611,
+      "mean_distance_mi": 3.432
+    },
+    {
+      "hour": 14,
+      "trips": 182521,
+      "mean_duration_min": 18.483,
+      "mean_distance_mi": 3.611
+    },
+    {
+      "hour": 15,
+      "trips": 182072,
+      "mean_duration_min": 18.892,
+      "mean_distance_mi": 3.651
+    },
+    {
+      "hour": 16,
+      "trips": 184338,
+      "mean_duration_min": 19.082,
+      "mean_distance_mi": 3.695
+    },
+    {
+      "hour": 17,
+      "trips": 199443,
+      "mean_duration_min": 17.996,
+      "mean_distance_mi": 3.419
+    },
+    {
+      "hour": 18,
+      "trips": 207075,
+      "mean_duration_min": 16.164,
+      "mean_distance_mi": 3.236
+    },
+    {
+      "hour": 19,
+      "trips": 181056,
+      "mean_duration_min": 15.104,
+      "mean_distance_mi": 3.319
+    },
+    {
+      "hour": 20,
+      "trips": 164039,
+      "mean_duration_min": 15.079,
+      "mean_distance_mi": 3.594
+    },
+    {
+      "hour": 21,
+      "trips": 174651,
+      "mean_duration_min": 15.401,
+      "mean_distance_mi": 3.615
+    },
+    {
+      "hour": 22,
+      "trips": 159607,
+      "mean_duration_min": 15.84,
+      "mean_distance_mi": 3.809
+    },
+    {
+      "hour": 23,
+      "trips": 119749,
+      "mean_duration_min": 16.338,
+      "mean_distance_mi": 4.392
+    }
+  ],
+  "by_dayofweek": [
+    {
+      "dayofweek": 0,
+      "day_name": "Mon",
+      "trips": 445070,
+      "mean_duration_min": 16.73
+    },
+    {
+      "dayofweek": 1,
+      "day_name": "Tue",
+      "trips": 521052,
+      "mean_duration_min": 16.967
+    },
+    {
+      "dayofweek": 2,
+      "day_name": "Wed",
+      "trips": 533435,
+      "mean_duration_min": 16.961
+    },
+    {
+      "dayofweek": 3,
+      "day_name": "Thu",
+      "trips": 400162,
+      "mean_duration_min": 17.651
+    },
+    {
+      "dayofweek": 4,
+      "day_name": "Fri",
+      "trips": 366529,
+      "mean_duration_min": 16.486
+    },
+    {
+      "dayofweek": 5,
+      "day_name": "Sat",
+      "trips": 365209,
+      "mean_duration_min": 15.692
+    },
+    {
+      "dayofweek": 6,
+      "day_name": "Sun",
+      "trips": 340784,
+      "mean_duration_min": 15.853
+    }
+  ],
+  "by_airport": {
+    "non_airport_trips": 2637395,
+    "non_airport_mean_min": 14.034,
+    "airport_trips": 334846,
+    "airport_mean_min": 37.508
+  },
+  "by_ratecode": [
+    {
+      "RatecodeID": 1,
+      "trips": 2523701,
+      "mean_duration_min": 14.547
+    },
+    {
+      "RatecodeID": 2,
+      "trips": 109756,
+      "mean_duration_min": 49.917
+    },
+    {
+      "RatecodeID": 3,
+      "trips": 9533,
+      "mean_duration_min": 39.76
+    },
+    {
+      "RatecodeID": 4,
+      "trips": 9346,
+      "mean_duration_min": 41.87
+    },
+    {
+      "RatecodeID": 5,
+      "trips": 10375,
+      "mean_duration_min": 31.894
+    },
+    {
+      "RatecodeID": 99,
+      "trips": 309530,
+      "mean_duration_min": 20.294
+    }
+  ],
+  "top_15_pickup_zones": [
+    {
+      "PULocationID": 132,
+      "trips": 169805,
+      "mean_duration_min": 42.103
+    },
+    {
+      "PULocationID": 161,
+      "trips": 152131,
+      "mean_duration_min": 15.122
+    },
+    {
+      "PULocationID": 237,
+      "trips": 125709,
+      "mean_duration_min": 11.436
+    },
+    {
+      "PULocationID": 162,
+      "trips": 110652,
+      "mean_duration_min": 14.542
+    },
+    {
+      "PULocationID": 236,
+      "trips": 107560,
+      "mean_duration_min": 11.707
+    },
+    {
+      "PULocationID": 230,
+      "trips": 104531,
+      "mean_duration_min": 16.882
+    },
+    {
+      "PULocationID": 186,
+      "trips": 103464,
+      "mean_duration_min": 16.445
+    },
+    {
+      "PULocationID": 138,
+      "trips": 99379,
+      "mean_duration_min": 28.95
+    },
+    {
+      "PULocationID": 170,
+      "trips": 92485,
+      "mean_duration_min": 14.209
+    },
+    {
+      "PULocationID": 142,
+      "trips": 86817,
+      "mean_duration_min": 12.509
+    },
+    {
+      "PULocationID": 163,
+      "trips": 85643,
+      "mean_duration_min": 14.786
+    },
+    {
+      "PULocationID": 68,
+      "trips": 84455,
+      "mean_duration_min": 16.387
+    },
+    {
+      "PULocationID": 234,
+      "trips": 79890,
+      "mean_duration_min": 13.322
+    },
+    {
+      "PULocationID": 48,
+      "trips": 76978,
+      "mean_duration_min": 13.743
+    },
+    {
+      "PULocationID": 239,
+      "trips": 75175,
+      "mean_duration_min": 12.179
+    }
+  ]
+}
