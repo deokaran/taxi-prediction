@@ -61,22 +61,22 @@ python taxi_duration_project.py --reuse-cleaned
 
 1. **Data cleaning**: Streams all 3 sheets of `yellow_tripdata_2024-07.xlsx` (`3,076,903` raw rows), retains **`3,010,079`** valid July 2024 trips (`1–180` min, `0.01–80` miles, `1–80` mph, valid NYC zones `1–265`), and exports a uniform `100,000`-row sample (`80,000` train / `20,000` test) for modeling.
 2. **Basic descriptive statistics**:
-   - Duration: **Mean = 16.66 min**, **Median = 12.93 min**, **Variance = 177.12**, **SD = 13.31 min**
-   - Distance: **Mean = 3.60 mi**, **Median = 1.83 mi**, **Variance = 21.93**, **SD = 4.68 mi**
-   - Group averages & SDs: Airport (**37.35 min**, SD 17.35) vs. Non-Airport (**14.01 min**, SD 9.98); Rush Hour (**16.93 min**, SD 14.11) vs. Non-Rush (**16.54 min**, SD 12.96)
-   - Strongest correlation with duration: `trip_distance` ($r = 0.8077$) and `is_airport_trip` ($r = 0.5556$)
+   - Duration: **Mean = 16.71 min**, **Median = 12.95 min**, **Variance = 177.07**, **SD = 13.31 min**
+   - Distance: **Mean = 3.61 mi**, **Median = 1.84 mi**, **Variance = 21.84**, **SD = 4.67 mi**
+   - Group averages & SDs: Airport (**37.48 min**, SD 17.04) vs. Non-Airport (**14.06 min**, SD 10.03); Rush Hour (**17.00 min**, SD 13.97) vs. Non-Rush (**16.59 min**, SD 13.02)
+   - Strongest correlation with duration: `trip_distance` ($r = 0.8102$) and `is_airport_trip` ($r = 0.5576$)
 3. **Models compared (20,000-row untouched test split)**:
 
 | Model | Test MAE (min) | Test RMSE (min) | Test R-squared |
 |---|---:|---:|---:|
-| Overall Average Baseline | 9.300 | 13.222 | -0.000 |
-| If/Else Group-Average Rules | 5.969 | 9.170 | 0.519 |
-| Simple Linear Regression (`8.380 + 2.300 * distance`) | 5.340 | 7.889 | 0.644 |
-| Multiple Linear Regression | 4.983 | 7.422 | 0.685 |
-| Tuned Ridge Regression (`alpha = 10.0`, 5-fold CV) | 4.984 | 7.422 | 0.685 |
+| Overall Average Baseline | 9.439 | 13.258 | -0.000 |
+| If/Else Group-Average Rules | 5.936 | 8.923 | 0.547 |
+| Simple Linear Regression (`8.358 + 2.313 * distance`) | 5.331 | 7.751 | 0.658 |
+| Multiple Linear Regression | 4.985 | 7.272 | 0.699 |
+| Tuned Ridge Regression (`alpha = 10.0`, 5-fold CV) | 4.985 | 7.273 | 0.699 |
 
 ## Where predictions are less reliable
 
-- **Very long trips (`>10 mi`)**: Highest duration SD (`17.44 min`) and highest test MAE (`11.24 min`).
-- **Airport trips**: Duration SD is `17.52 min` (test MAE `9.05 min`) due to highway, bridge/tunnel, and terminal congestion.
-- **Rush-hour trips**: Higher variance (`SD = 13.70 min`, test MAE `5.29 min`) compared with non-rush trips (`SD = 13.01 min`, test MAE `4.86 min`).
+- **Very long trips (`>10 mi`)**: Highest duration SD (`16.10 min`) and highest test MAE (`10.97 min`).
+- **Airport trips**: Duration SD is `16.93 min` (test MAE `8.90 min`) due to highway, bridge/tunnel, and terminal congestion.
+- **Rush-hour trips**: Higher variance (`SD = 13.71 min`, test MAE `5.24 min`) compared with non-rush trips (`SD = 13.06 min`, test MAE `4.88 min`).
