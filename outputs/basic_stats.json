@@ -1,47 +1,30 @@
 {
-  "cleaning_counts": {
-    "raw_rows": null,
-    "dropped_invalid": null,
-    "cleaned_rows": 3010079
-  },
+  "cleaned_rows": 3010079,
   "sample_rows": 100000,
-  "duration_stats": {
-    "average_mean_min": 16.7147,
-    "median_min": 12.95,
-    "variance_min2": 177.0731,
-    "std_dev_min": 13.3069,
-    "min_min": 1.0,
-    "max_min": 158.45,
-    "q25_min": 7.95,
-    "q75_min": 20.95
+  "mean_min": 16.6851,
+  "median_min": 12.92,
+  "variance_min2": 179.5409,
+  "sd_min": 13.3993,
+  "distance_mean_mi": 3.617,
+  "distance_var_mi2": 22.0077,
+  "distance_sd_mi": 4.6912,
+  "group_averages": {
+    "Non-Airport": 14.05,
+    "Airport": 37.38,
+    "Non-Rush": 16.52,
+    "Rush Hour": 17.08,
+    "Weekend": 15.7,
+    "Weekday": 17.0
   },
-  "distance_stats": {
-    "average_mean_mi": 3.6134,
-    "median_mi": 1.84,
-    "variance_mi2": 21.8418,
-    "std_dev_mi": 4.6735
-  },
-  "group_averages_and_sd": {
-    "airport_mean_min": 37.477,
-    "airport_sd_min": 17.041,
-    "non_airport_mean_min": 14.063,
-    "non_airport_sd_min": 10.025,
-    "rush_hour_mean_min": 17.004,
-    "rush_hour_sd_min": 13.966,
-    "non_rush_mean_min": 16.594,
-    "non_rush_sd_min": 13.019,
-    "weekend_mean_min": 15.73,
-    "weekday_mean_min": 17.02
-  },
-  "correlations_with_duration": {
-    "trip_distance": 0.8102,
-    "pickup_hour": 0.0174,
-    "pickup_dayofweek": -0.0321,
-    "is_weekend": -0.0412,
-    "is_rush_hour": 0.014,
-    "is_overnight": -0.0518,
-    "passenger_count": 0.0545,
-    "is_airport_trip": 0.5576,
+  "correlations": {
+    "trip_distance": 0.8032,
+    "pickup_hour": 0.0099,
+    "pickup_dayofweek": -0.0304,
+    "is_weekend": -0.0414,
+    "is_rush_hour": 0.0191,
+    "is_overnight": -0.0468,
+    "passenger_count": 0.0548,
+    "is_airport_trip": 0.5512,
     "same_zone": -0.1532
   }
 }
