@@ -33,13 +33,11 @@ project/
 |   |-- cv_tuning.csv
 |   |-- linear_coefficients.csv
 |   |-- model_metrics.csv
-|   |-- report.md
 |   |-- segment_errors.csv
 |   `-- test_predictions.csv
-|-- requirements.txt
 |-- taxi_duration_project.py                      # Single-file Python script
-|-- report.md                                     # Root copy of outputs/report.md
-`-- README.md
+|-- report.md                                     # Project report
+`-- README.md                                     # Instructions & summary
 ```
 
 ## How to run
@@ -49,7 +47,7 @@ From inside `project/`:
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate      # On Windows PowerShell: .\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
+python -m pip install matplotlib numpy pandas scikit-learn seaborn tabulate
 python taxi_duration_project.py
 ```
 

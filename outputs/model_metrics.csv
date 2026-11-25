@@ -1,11 +1,11 @@
 model,split,mae,rmse,r2
-Overall Average Baseline,train,9.4016,13.3303,0.0
-Overall Average Baseline,test,9.2998,13.2221,-0.0
-If/Else Group-Average Rules,train,5.8947,9.0467,0.5394
-If/Else Group-Average Rules,test,5.9693,9.1696,0.519
-Simple Linear Regression (Distance),train,5.3121,7.8328,0.6547
-Simple Linear Regression (Distance),test,5.3397,7.8889,0.644
-Multiple Linear Regression,train,4.9763,7.3645,0.6948
-Multiple Linear Regression,test,4.9833,7.4224,0.6849
-Tuned Ridge Regression,train,4.9768,7.3646,0.6948
-Tuned Ridge Regression,test,4.9839,7.4221,0.6849
+Overall Average Baseline,train,9.4128,13.319,0.0
+Overall Average Baseline,test,9.4389,13.258,-0.0
+If/Else Group-Average Rules,train,5.9118,9.0388,0.5395
+If/Else Group-Average Rules,test,5.9359,8.9226,0.5471
+Simple Linear Regression (Distance),train,5.3208,7.8129,0.6559
+Simple Linear Regression (Distance),test,5.331,7.7508,0.6582
+Multiple Linear Regression,train,4.9846,7.3491,0.6955
+Multiple Linear Regression,test,4.9846,7.272,0.6991
+Tuned Ridge Regression,train,4.985,7.3492,0.6955
+Tuned Ridge Regression,test,4.9852,7.2726,0.6991

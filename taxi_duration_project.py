@@ -496,7 +496,6 @@ def write_report(
     simple_slope: float,
     simple_intercept: float,
     segment_df: pd.DataFrame,
-    output_dir: Path,
     root_report: Path,
 ) -> None:
     """Generate a clear, concise report.md summarizing statistics, models, findings, and limitations."""
@@ -567,7 +566,6 @@ We progress from simple statistical baselines to linear regression:
 - Member 3: [Name] — If/else baseline, linear regression modeling, and Ridge hyperparameter tuning
 - Member 4: [Name] — Reliability analysis, README, and final report
 """
-    (output_dir / "report.md").write_text(report, encoding="utf-8")
     root_report.write_text(report, encoding="utf-8")
 
 
@@ -664,7 +662,7 @@ def main() -> None:
     save_diagnostic_plots(y_test, ridge_test_preds, figures_dir)
 
     root_report = Path(__file__).resolve().parent / "report.md"
-    write_report(stats, metrics_df, cv_df, best_alpha, simple_slope, simple_intercept, segment_df, args.output, root_report)
+    write_report(stats, metrics_df, cv_df, best_alpha, simple_slope, simple_intercept, segment_df, root_report)
 
     print("\n=== Basic Statistics ===")
     print(json.dumps(stats["duration_stats"], indent=2))
