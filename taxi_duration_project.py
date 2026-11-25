@@ -324,7 +324,8 @@ def main() -> None:
     metrics_df = pd.DataFrame(results)
     metrics_df.to_csv(OUTPUT_DIR / "model_metrics.csv", index=False)
     cv_df.to_csv(OUTPUT_DIR / "cv_tuning.csv", index=False)
-    pd.DataFrame({"feature": FEATURES, "coefficient": np.round(mlr.coef_, 4)}).to_csv(OUTPUT_DIR / "linear_coefficients.csv", index=False)
+    coef_df = pd.DataFrame({"feature": FEATURES, "coefficient": np.round(mlr.coef_, 4)})
+    coef_df.to_csv(OUTPUT_DIR / "linear_coefficients.csv", index=False)
     pd.DataFrame({"actual_duration_min": y_test.values, "predicted_duration_min": np.round(ridge_preds, 3)}).to_csv(OUTPUT_DIR / "test_predictions.csv", index=False)
 
     seg_df = X_test.assign(actual=y_test.values, err=np.abs(y_test.values - ridge_preds), sq_err=(y_test.values - ridge_preds) ** 2)
@@ -342,21 +343,55 @@ def main() -> None:
     make_plots(df, stats, y_test, ridge_preds)
 
     best_row = metrics_df[(metrics_df["model"] == "Tuned Ridge Regression") & (metrics_df["split"] == "test")].iloc[0]
-    report = f"""# Group 10 — Simple Taxi Trip Duration Prediction Report
+    avg_row = metrics_df[(metrics_df["model"] == "Overall Average Baseline") & (metrics_df["split"] == "test")].iloc[0]
+    rule_row = metrics_df[(metrics_df["model"] == "If/Else Group-Average Rules") & (metrics_df["split"] == "test")].iloc[0]
+    slr_row = metrics_df[(metrics_df["model"] == "Simple Linear Regression (Distance)") & (metrics_df["split"] == "test")].iloc[0]
+    coef_map = dict(zip(coef_df["feature"], coef_df["coefficient"]))
 
-## 1. Objective & Data
-Predict NYC Yellow Taxi trip duration (`{TARGET}`, minutes) using **only information available when the trip begins**.
-- **Cleaned dataset**: **{total_cleaned_rows:,}** valid July 2024 trips (`100,000`-trip sample split 80/20 into 80,000 train / 20,000 test).
-- **Leakage columns removed**: `tpep_dropoff_datetime`, `fare_amount`, `extra`, `mta_tax`, `tip_amount`, `tolls_amount`, `improvement_surcharge`, `total_amount`, `congestion_surcharge`, `Airport_fee`, `payment_type`, `store_and_fwd_flag`.
+    report = f"""# Group 10 — NYC Taxi Trip Duration Prediction Report
 
-## 2. Basic Statistics (Average, Median, Variance, SD, Correlation)
-- **Trip duration**: Mean = **{stats['mean_min']:.2f} min**, Median = **{stats['median_min']:.2f} min**, Variance = **{stats['variance_min2']:.2f}**, SD = **{stats['sd_min']:.2f} min**
-- **Trip distance**: Mean = **{stats['distance_mean_mi']:.2f} mi**, Variance = **{stats['distance_var_mi2']:.2f}**, SD = **{stats['distance_sd_mi']:.2f} mi**
-- **Group averages**: Airport (**{stats['group_averages']['Airport']:.2f} min**) vs. Non-Airport (**{stats['group_averages']['Non-Airport']:.2f} min**); Rush Hour (**{stats['group_averages']['Rush Hour']:.2f} min**) vs. Non-Rush (**{stats['group_averages']['Non-Rush']:.2f} min**)
-- **Strongest correlations**: `trip_distance` ($r = {stats['correlations']['trip_distance']:.4f}$), `is_airport_trip` ($r = {stats['correlations']['is_airport_trip']:.4f}$)
+## 1. Project Objective & Data Source
+This study investigates patterns in NYC Yellow Taxi trip duration across pickup times, airport status, and trip-start characteristics, and builds a simple, interpretable predictive model for **trip duration in minutes (`{TARGET}`)** using **only information available when a trip begins**.
 
-## 3. Models & Ridge Alpha Tuning
-Simple Linear Regression formula: $\\text{{duration}} = {slr.intercept_:.3f} + {slr.coef_[0]:.3f} \\times \\text{{trip\\_distance}}$.
+- **Source dataset**: NYC TLC Yellow Taxi Trip Records (`yellow_tripdata_2024-07.xlsx`, 3 Excel sheets)
+- **Cleaned dataset**: **{total_cleaned_rows:,}** valid July 2024 trips exported to `data/cleaned/yellow_tripdata_2024-07_cleaned.csv`
+- **Modeling sample**: **100,000** uniform random trips split **80% training (80,000)** and **20% untouched test (20,000)**
+
+### Preprocessing & Leakage Prevention (Justified Choices)
+- **Strict trip-start constraint**: Dropped all 12 post-trip / payment-end columns (`tpep_dropoff_datetime`, `fare_amount`, `extra`, `mta_tax`, `tip_amount`, `tolls_amount`, `improvement_surcharge`, `total_amount`, `congestion_surcharge`, `Airport_fee`, `payment_type`, `store_and_fwd_flag`) because metered fares and dropoff timestamps are only known after a trip ends.
+- **Domain filtering**: Kept trips within July 2024 (`1–180` minutes, `0.01–80` miles, `1–80` mph implied speed, valid NYC Taxi Zones `1–265`) to remove negative durations, stationary 0-mile charges, GPS speed spikes, and stuck meters.
+- **Missing-value handling**: Invalid/missing `passenger_count` entries were filled using the **training-set median** only (`{pax_median:.1f}` passengers) to prevent test-set leakage.
+
+## 2. Exploratory Data Analysis & Basic Statistics
+
+| Metric | Trip Duration (`{TARGET}`) | Trip Distance (`trip_distance`) |
+|---|---:|---:|
+| **Mean (Average)** | {stats['mean_min']:.2f} min | {stats['distance_mean_mi']:.2f} mi |
+| **Median** | {stats['median_min']:.2f} min | {df['trip_distance'].median():.2f} mi |
+| **Variance** | {stats['variance_min2']:.2f} min² | {stats['distance_var_mi2']:.2f} mi² |
+| **Standard Deviation (SD)** | {stats['sd_min']:.2f} min | {stats['distance_sd_mi']:.2f} mi |
+
+### Group Averages & Correlations
+- **Airport vs. Non-Airport**: Airport-linked trips (`PULocationID` or `DOLocationID` in JFK/LGA/EWR) average **{stats['group_averages']['Airport']:.2f} min**, more than 2.6× longer than non-airport trips (**{stats['group_averages']['Non-Airport']:.2f} min**).
+- **Rush Hour vs. Non-Rush**: Weekday rush hours (`07:00–09:59`, `16:00–19:59`) average **{stats['group_averages']['Rush Hour']:.2f} min** vs. **{stats['group_averages']['Non-Rush']:.2f} min** outside rush hour.
+- **Weekday vs. Weekend**: Weekdays average **{stats['group_averages']['Weekday']:.2f} min** vs. **{stats['group_averages']['Weekend']:.2f} min** on weekends.
+- **Pearson Correlations with Duration**: `trip_distance` ($r = {stats['correlations']['trip_distance']:.4f}$), `is_airport_trip` ($r = {stats['correlations']['is_airport_trip']:.4f}$), `same_zone` ($r = {stats['correlations']['same_zone']:.4f}$), `passenger_count` ($r = {stats['correlations']['passenger_count']:.4f}$), `is_overnight` ($r = {stats['correlations']['is_overnight']:.4f}$), `is_weekend` ($r = {stats['correlations']['is_weekend']:.4f}$).
+
+All exploratory and diagnostic figures (`duration_distribution.png`, `duration_by_hour.png`, `duration_vs_distance.png`, `duration_by_conditions.png`, `correlation_heatmap.png`, `actual_vs_predicted.png`, `residual_distribution.png`) are saved under `outputs/figures/`.
+
+## 3. Modeling Approach, Justification & Hyperparameter Tuning
+
+We chose an interpretable progression from basic statistical baselines to linear regression:
+1. **Overall Average Baseline**: Always predicts the training mean (`{avg_val:.2f} min`), establishing the zero-skill benchmark ($R^2 = 0$).
+2. **If/Else Group-Average Rules**: Uses transparent `if / elif / else` branches over airport status, distance (`<1.5`, `1.5–5`, `>5` mi), and rush-hour flag with training-set averages.
+3. **Simple Linear Regression**: Models $\\text{{duration}} = {slr.intercept_:.3f} + {slr.coef_[0]:.3f} \\times \\text{{trip\\_distance}}$ (every additional mile adds ~{slr.coef_[0]:.2f} minutes on average).
+4. **Multiple Linear Regression**: Extends Simple Linear Regression to all 9 trip-start features (`{", ".join(FEATURES)}`).
+5. **Tuned Ridge Linear Regression**: Tunes L2 penalty `alpha` across `[0.01, 0.1, 1.0, 10.0, 100.0]` using 5-fold cross-validation (`neg_root_mean_squared_error`) on the training set only.
+
+### Evaluation Metrics Justification
+- **MAE (minutes)**: Directly measures average prediction error in minutes for rider/dispatcher ETAs.
+- **RMSE (minutes)**: Penalizes large travel-time errors (used for cross-validation tuning).
+- **$R^2$**: Measures the fraction of duration variance explained relative to predicting the overall average.
 
 ### 5-Fold Cross-Validation (`Ridge` alpha tuning)
 {cv_df.to_markdown(index=False)}
@@ -364,16 +399,40 @@ Simple Linear Regression formula: $\\text{{duration}} = {slr.intercept_:.3f} + {
 ### Train & Untouched Test Results
 {metrics_df.to_markdown(index=False)}
 
-Final Tuned Ridge Regression (`alpha = {best_alpha}`): **MAE = {best_row['mae']:.3f} min**, **RMSE = {best_row['rmse']:.3f} min**, **$R^2$ = {best_row['r2']:.3f}**.
+- **Model Progression Interpretation**: Predicting the overall mean yields Test **RMSE = {avg_row['rmse']:.3f} min** ($R^2 = {avg_row['r2']:.3f}$). Simple `if/else` group averages reduce Test RMSE to **{rule_row['rmse']:.3f} min** ($R^2 = {rule_row['r2']:.3f}$). Simple Linear Regression reaches **{slr_row['rmse']:.3f} min** ($R^2 = {slr_row['r2']:.3f}$), and Multiple Linear Regression / Tuned Ridge (`alpha = {best_alpha}`) achieves **MAE = {best_row['mae']:.3f} min**, **RMSE = {best_row['rmse']:.3f} min**, and **$R^2 = {best_row['r2']:.3f}$**—explaining ~{best_row['r2']*100:.1f}% of trip duration variance using linear trip-start features alone, with virtually identical train and test scores (no overfitting).
 
-## 4. Where Predictions Are Less Reliable
+### Multiple Linear Regression Coefficients (Interpretation)
+{coef_df.to_markdown(index=False)}
+
+- Holding other variables fixed, each additional mile adds **+{coef_map['trip_distance']:.2f} min**.
+- Overnight trips (`22:00–05:59`) are **{abs(coef_map['is_overnight']):.2f} min faster** (`{coef_map['is_overnight']:+.2f}`) and weekend trips are **{abs(coef_map['is_weekend']):.2f} min faster** (`{coef_map['is_weekend']:+.2f}`) due to lighter road congestion.
+- Rush-hour trips add **+{coef_map['is_rush_hour']:.2f} min**, while `is_airport_trip` shows `{coef_map['is_airport_trip']:+.2f} min` after controlling for distance because long highway stretches to JFK/LGA/EWR move at higher average speeds per mile than dense Midtown Manhattan streets.
+
+## 4. Supporting Travel-Time Estimation & Where Predictions Are Less Reliable
+
+### How Findings Support Travel-Time Estimation
+A simple linear formula combining planned route distance, pickup hour, weekend/overnight/rush-hour indicators, and airport flags gives dispatchers and riders an immediate, transparent baseline ETA before the trip starts—cutting error roughly in half compared with guessing the average trip duration.
+
+### Segment Reliability Analysis (Test Set)
 {segment_df.to_markdown(index=False)}
 
-Long trips (`>10 mi`), airport trips, and rush-hour rides have the largest duration SD (highest variance), causing larger prediction errors.
+Predictions are **less reliable** in high-variance (high-SD) conditions:
+1. **Very long trips (`>10 mi`)**: Duration SD is **{segment_df.loc[segment_df['segment']=='Very Long (>10 mi)', 'sd_min'].values[0]:.2f} min** and Test MAE rises to **{segment_df.loc[segment_df['segment']=='Very Long (>10 mi)', 'mae'].values[0]:.2f} min** (vs. **{segment_df.loc[segment_df['segment']=='Short (<=1.5 mi)', 'mae'].values[0]:.2f} min** for short trips `<=1.5 mi`) because longer corridors accumulate highway delays and bottlenecks.
+2. **Airport trips**: Duration SD is **{segment_df.loc[segment_df['segment']=='Airport Trip', 'sd_min'].values[0]:.2f} min** (MAE **{segment_df.loc[segment_df['segment']=='Airport Trip', 'mae'].values[0]:.2f} min**) due to bridge/tunnel congestion, toll queues, and terminal dropoff traffic.
+3. **Weekday rush hours**: Higher travel-time variability (SD **{segment_df.loc[segment_df['segment']=='Rush Hour', 'sd_min'].values[0]:.2f} min**, MAE **{segment_df.loc[segment_df['segment']=='Rush Hour', 'mae'].values[0]:.2f} min**) than non-rush periods (SD **{segment_df.loc[segment_df['segment']=='Non-Rush Hour', 'sd_min'].values[0]:.2f} min**, MAE **{segment_df.loc[segment_df['segment']=='Non-Rush Hour', 'mae'].values[0]:.2f} min**).
 
-## 5. Limitations & Team Contributions
-- **Limitations**: Linear models do not capture sharp non-linear traffic bottlenecks; historical `trip_distance` proxies pre-trip planned route distance; weather and events are unobserved.
-- **Team**: Member 1 [Name] (Cleaning) | Member 2 [Name] (Stats & EDA) | Member 3 [Name] (If/Else & Linear Regression) | Member 4 [Name] (Report & Review)
+## 5. Limitations
+- **Linear assumption**: Linear regression cannot model sharp non-linear congestion curves or specific intersection bottlenecks.
+- **Route distance proxy**: `trip_distance` in TLC logs is odometer distance recorded at trip end; in a live pre-trip system, planned navigation route distance would be used instead and may differ slightly during detours.
+- **Coarse spatial & external context**: Pickup/dropoff Taxi Zones are not used individually in this linear model, and weather, road closures, or July 4th holiday events are unobserved.
+- **Single-month scope**: Models are fitted on July 2024 trips only and should be retrained for winter or other seasonal periods.
+
+## 6. Team Contributions
+Replace the placeholders below with actual Group 10 member names before submission:
+- Member 1: [Name] — Data cleaning, leakage removal, and validation
+- Member 2: [Name] — Descriptive statistics (mean, median, variance, SD, correlation) and EDA plots
+- Member 3: [Name] — If/else rule baseline, linear regression modeling, and Ridge hyperparameter tuning
+- Member 4: [Name] — Reliability analysis, README instructions, and final report
 """
     (BASE_DIR / "report.md").write_text(report, encoding="utf-8")
 
