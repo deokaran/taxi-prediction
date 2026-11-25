@@ -1,0 +1,9 @@
+dimension,segment,trips,mean_duration_min,sd_duration_min,mae,rmse
+Distance Group,Long (5-10 mi),1895,26.919,11.317,7.071,10.496
+Distance Group,Medium (1.5-5 mi),8229,16.466,6.993,4.297,6.153
+Distance Group,Short (<=1.5 mi),8063,8.138,4.449,3.788,4.627
+Distance Group,Very Long (>10 mi),1813,44.002,17.441,11.242,15.017
+Rush Hour,Non-Rush Hour,14032,16.478,13.012,4.855,7.311
+Rush Hour,Rush Hour,5968,16.87,13.7,5.287,7.678
+Airport,Airport Trip,2297,36.403,17.515,9.048,12.403
+Airport,Non-Airport Trip,17703,14.025,10.01,4.457,6.502

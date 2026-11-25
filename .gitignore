@@ -7,7 +7,8 @@ venv/
 *.xlsx
 data/cleaned/*.csv
 
-# Python caches
+# Office lock files & Python caches
+.~lock.*
 __pycache__/
 *.pyc
 *.pyo
